@@ -764,3 +764,13 @@ then from here we can upload an RCE
 - File Length Filtering
 - File Name Filtering
 - File Content Filtering
+
+---
+
+# Exit VIM
+
+To save a file and exit Vim, do the following:
+
+- Switch to command mode by pressing the Esc key.
+- Press : (colon) to open the prompt bar in the bottom left corner of the window.
+- Type x after the colon and hit Enter. This will save the changes and exit.
