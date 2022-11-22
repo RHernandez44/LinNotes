@@ -793,3 +793,7 @@ curl -X POST -F "submit:<value>" -F "<file-parameter>:@<path-to-file>" <site>
 
 The key to bypassing any kind of server side filter is to enumerate and see what is allowed, as well as what is blocked; then try to craft a payload which can pass the criteria the filter is looking for.
 
+# Bypassing using magic numbers
+
+- use nano to add "AAAA" to the start of the file
+- use hexeditor to change those characters to magic numbers associated to the target file type
