@@ -338,7 +338,7 @@ Number of concurrent threads (default 10) - change to 64 to go faster
 - -o	--output
 Output file to write results to
 - -x    --extensions
-outputs file extensions in folders e.g. -x html, js, txt, conf, php
+outputs file extensions in folders e.g. -x html, js, txt, conf, php ***THIS ONE IS IMPORTANT***
 - -k	--no-tls-validation
 Skip TLS certificate verification
 >It's important to specify HTTPS:// or HTTP:// when using URLs
