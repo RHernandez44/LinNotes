@@ -180,6 +180,10 @@ logs access information, ip of logins etc
 
 >/etc/hosts
 
+>/etc/passwd
+
+
+
 
 # Connect
 ```
@@ -398,6 +402,12 @@ can output to certain filetypes like html or txt
 
 
 # Priveledge Escalation
+
+```
+sudo -l
+```
+
+>shows current users permissions
 
 first ssh into ip THEN
 ```
@@ -813,3 +823,4 @@ collect a burpsuite capture to delete the filter either *before* the page loads 
 - use nano to add "A" the correct number of times to the start of the file
 - use hexeditor to change those characters to magic numbers associated to the target file type
 
+Hello
