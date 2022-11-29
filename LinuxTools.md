@@ -343,6 +343,8 @@ outputs file extensions in folders e.g. -x html, js, txt, conf, php
 Skip TLS certificate verification
 >It's important to specify HTTPS:// or HTTP:// when using URLs
 
+An important Gobuster switch here is the -x switch, which can be used to look for files with specific extensions. For example, if you added -x php,txt,html to your Gobuster command, the tool would append .php, .txt, and .html to each word in the selected wordlist, one at a time. This can be very useful if you've managed to upload a payload and the server is changing the name of uploaded files.
+
 ### Subdomains
 ```
 gobuster dns
@@ -510,6 +512,14 @@ javascript that is run on the client-side end of the web application.
 - -t 	--uses 16 parallel connections
 - -P	--path to wordlist
 - uses ssh
+
+```
+sudo hydra -l R1ckRul3s -P /usr/share/wordlists/rockyou.txt 10.10.134.126 http-post-form "/login/login.php:username=R1ckRul3s&password=^PASS^&sub=Login:Invalid username or password."
+```
+- http-post-form    --uses post from the subdirectory
+- username=R1ckRul3s&password=^PASS^&sub=Login      --found in the network tab under "send and edit"
+- Invalid username or password.     -- Invalid creds state, found by entering the incorrect credentials 
+
 
 ```
 john hash.txt
@@ -775,7 +785,9 @@ To save a file and exit Vim, do the following:
 - Press : (colon) to open the prompt bar in the bottom left corner of the window.
 - Type x after the colon and hit Enter. This will save the changes and exit.
 
-# Bypass Client side filter 
+# Bypass file filtering
+
+
 
 ## Send the file directly to the upload point
 
@@ -793,7 +805,11 @@ curl -X POST -F "submit:<value>" -F "<file-parameter>:@<path-to-file>" <site>
 
 The key to bypassing any kind of server side filter is to enumerate and see what is allowed, as well as what is blocked; then try to craft a payload which can pass the criteria the filter is looking for.
 
+append a file type e.g. `webshell.jpg.php`
+collect a burpsuite capture to delete the filter either *before* the page loads *or before* the file is uploaded
+
 # Bypassing using magic numbers
 
-- use nano to add "AAAA" to the start of the file
+- use nano to add "A" the correct number of times to the start of the file
 - use hexeditor to change those characters to magic numbers associated to the target file type
+
