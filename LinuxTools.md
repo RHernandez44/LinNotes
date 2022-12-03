@@ -105,6 +105,18 @@ searches for patterns
 grep "ftp" /usr/share/nmap/scripts/script.db
 ```
 grep a file
+
+```
+grep -E "thm|tryhackme" log.txt
+```
+-E	Searches using regex (regular expressions). For example, we can search for lines that contain either "thm" or "tryhackme"	
+
+```
+grep -r "helloworld" mydirectory
+```
+
+Search recursively. For example, search all of the files in a directory for this value.
+
 ```
 ls -l /usr/share/nmap/scripts/*ftp*
 ```
@@ -182,8 +194,31 @@ logs access information, ip of logins etc
 
 >/etc/passwd
 
+>password hashes are stored in /etc/shadow
+
+>/var/log
+
+shows logs
+
+| Category | Description | File |Example
+|---|---|---|---|
+|Authentication|This log file contains all authentication (log in). This is usually attempted either remotely or on the system itself (i.e., accessing another user after logging in).|	auth.log|Failed password for root from 192.168.1.35 port 22 ssh2.
+|Package Management |This log file contains all events related to package management on the system. When installing a new software (a package), this is logged in this file. This is useful for debugging or reverting changes in case this installation causes unintended behaviour on the system.|dpkg.log|2022-06-03 21:45:59 installed neofetch
+|Syslog	|This log file contains all events related to things happening in the system's background. For example, crontabs executing, services starting and stopping, or other automatic behaviours such as log rotation. This file can help debug problems.|syslog|2022-06-03 13:33:7 Finished Daily apt download activities..|
+|Kernel|This log file contains all events related to kernel events on the system. For example, changes to the kernel, or output from devices such as networking equipment or physical devices such as USB devices.|	kern.log|2022-06-03 10:10:01 Firewalling registered|
+
+# Handy Windows files
+
+>Event Viewer
+shows logs
 
 
+
+# Common Hash Prefix
+
+>$1$	    md5crypt, used in Cisco stuff and older Linux/Unix systems
+>$2$, $2a$, $2b$, $2x$, $2y$        Bcrypt (Popular for web applications)
+>$6$    	sha512crypt (Default for most Linux/Unix systems)
 
 # Connect
 ```
@@ -530,11 +565,37 @@ sudo hydra -l R1ckRul3s -P /usr/share/wordlists/rockyou.txt 10.10.134.126 http-p
 - username=R1ckRul3s&password=^PASS^&sub=Login      --found in the network tab under "send and edit"
 - Invalid username or password.     -- Invalid creds state, found by entering the incorrect credentials 
 
+# johntheRipper
+
+wget https://gitlab.com/kalilinux/packages/hash-identifier/-/raw/kali/master/hash-id.py
+
+>hash identifier
 
 ```
 john hash.txt
 ```
 uses johntheripper to crack hashed passwords
+
+```
+john --wordlist=[path to wordlist] [path to file]
+```
+--wordlist=~/Tryhackme/wordlists/rockyou.txt hash.txt
+
+```
+john --format=raw-md5 --wordlist=/usr/share/wordlists/rockyou.txt hash_to_crack.txt
+```
+
+>if you're dealing with a standard hash type, e.g. md5 as in the example above, you have to prefix it with `raw-` to tell john you're just dealing with a standard hash type, though this doesn't always apply. To check if you need to add the prefix or not, you can list all of John's formats using john `--list=formats` and either check manually, or grep for your hash type using something like `john --list=formats | grep -iF "md5"`
+
+```
+unshadow [path to passwd] [path to shadow]
+```
+
+>[path to passwd] - The file that contains the copy of the /etc/passwd file you've taken from the target machine
+
+>[path to shadow] - The file that contains the copy of the /etc/shadow file you've taken from the target machine
+
+John can be very particular about the formats it needs data in to be able to work with it, for this reason- in order to crack /etc/shadow passwords, you must combine it with the /etc/passwd file in order for John to understand the data it's being given. To do this, we use a tool built into the John suite of tools called unshadow 
 
 ```
 Intruder tab on Burpsuite
