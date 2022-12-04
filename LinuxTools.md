@@ -434,7 +434,30 @@ Tuning options to find certain vulnerability types
 >nikto -h 10.10.10.1 -o NiktoReport.html
 can output to certain filetypes like html or txt
 
+# OSINT
 
+- `inurl:` Searches for a specified text in all indexed URLs. For example, `inurl:hacking` will fetch all URLs containing the word "hacking".
+- `filetype:` Searches for specified file extensions. For example, `filetype:pdf "hacking"` will bring all pdf files containing the word "hacking". 
+- `site:` Searches all the indexed URLs for the specified domain. For example, `site:tryhackme.com` will bring all the indexed URLs from  tryhackme.com.
+- `cache:` Get the latest cached version by the Google search engine. For example, `cache:tryhackme.com.`
+
+```
+whois santagift.shop
+```
+
+uses database to display public domain info
+
+>https://who.is/
+
+```
+robots.txt
+```
+
+provides sitemap info
+
+> Searching GitHub Repos
+
+Search various terms on GitHub to find something useful
 
 # Priveledge Escalation
 
@@ -587,6 +610,8 @@ john --format=raw-md5 --wordlist=/usr/share/wordlists/rockyou.txt hash_to_crack.
 
 >if you're dealing with a standard hash type, e.g. md5 as in the example above, you have to prefix it with `raw-` to tell john you're just dealing with a standard hash type, though this doesn't always apply. To check if you need to add the prefix or not, you can list all of John's formats using john `--list=formats` and either check manually, or grep for your hash type using something like `john --list=formats | grep -iF "md5"`
 
+---
+
 ```
 unshadow [path to passwd] [path to shadow]
 ```
@@ -597,6 +622,29 @@ unshadow [path to passwd] [path to shadow]
 
 John can be very particular about the formats it needs data in to be able to work with it, for this reason- in order to crack /etc/shadow passwords, you must combine it with the /etc/passwd file in order for John to understand the data it's being given. To do this, we use a tool built into the John suite of tools called unshadow 
 
+---
+```
+zip2john [options] [zip file] > [output file]
+```
+convert the zip file into a hash format that John is able to understand
+
+```
+rar2john [options] [zip file] > [output file]
+```
+convert the rar file into a hash format that John is able to understand
+
+```
+ssh2john [options] [zip file] > [output file]
+```
+convert the ssh file into a hash format that John is able to understand
+
+```
+john --single --format=[format] [path to file] 
+```
+--single mode is used for username mangling
+>If you're cracking hashes in single crack mode, you need to change the file format that you're feeding john for it to understand what data to create a wordlist from. You do this by prepending the hash with the username that the hash belongs to, so according to the above example- we would change the file hashes.txt from: `1efee03cdcb96d90ad48ccc7b8666033` To `mike:1efee03cdcb96d90ad48ccc7b8666033`
+
+
 ```
 Intruder tab on Burpsuite
 ```
@@ -605,6 +653,21 @@ Intruder tab on Burpsuite
 Opens MSF console
 ```
 msfconsole
+```
+search exploits
+```
+search [[exploit service]]
+```
+see exploit options
+```
+options
+
+```
+set options 
+
+```
+set RHOSTS
+
 ```
 search exploits
 ```
@@ -847,6 +910,22 @@ then from here we can upload an RCE
 - File Content Filtering
 
 ---
+# REGEX
+
+- [0-9] - Will include numbers 0-9
+
+- [0] - Will include only the number 0
+
+- [A-z] - Will include both upper and lowercase
+
+- [A-Z] - Will include only uppercase letters
+
+- [a-z] - Will include only lowercase letters
+
+- [a] - Will include only a
+
+- [!£$%@] - Will include the symbols !£$%@
+
 
 # Exit VIM
 
