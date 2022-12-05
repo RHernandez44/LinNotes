@@ -190,6 +190,8 @@ logs access information, ip of logins etc
 
 >/usr/share/wordlists
 
+>The ~/.ssh folder is the default place to store these keys for OpenSSH
+
 >/etc/hosts
 
 >/etc/passwd
@@ -220,6 +222,18 @@ shows logs
 >$2$, $2a$, $2b$, $2x$, $2y$        Bcrypt (Popular for web applications)
 >$6$    	sha512crypt (Default for most Linux/Unix systems)
 
+# GPG
+
+```
+gpg --import [keyfile]
+```
+
+imports seceret key
+
+```
+gpg --decrypt [FILE_TO_DECRYPT]
+```
+
 # Connect
 ```
 telnet [ip_address] [port] 
@@ -239,6 +253,8 @@ nc -lvp 4444
 ```
 sets a listener to port 4444
 
+## SSH
+
 ```
 ssh raz@10.10.169.1
 ```	
@@ -246,8 +262,20 @@ ssh raz@10.10.169.1
 ```
 ssh -i [rsa_key_filename] [user]@[ip_address]
 ```
+```
+ssh -i keyNameGoesHere user@host
+```
+
+how you specify a key for the standard Linux OpenSSH client.
+
+>The ~/.ssh folder is the default place to store these keys for OpenSSH
 
 **ensure you use `chmod 600 rsa_key_filename`**
+
+```
+ssh-copy-id -i ~/.ssh/id_rsa.pub YOUR_USER_NAME@IP_ADDRESS_OF_THE_SERVER
+```
+Your public key should be copied at the appropriate folder on the remote server automatically.
 
 ```
 mysql -h [IP] -u [username] -p
@@ -330,6 +358,7 @@ nmap [host / ip]
 - --top-ports [number] 		Scan [number] most common ports
 - -sL: List Scan - simply list targets to scan
 - -sn: Ping Scan - disable port scan
+- sS    stealth scan/TCP SYN Scan
 
 `nmap $ip -p- -A -v -top-ports 100`
 
@@ -413,7 +442,15 @@ enum4linux
 ```
 smbclient //10.10.10.2/secret -U suit -p 445
 ```
+
+- -u    username
+- -p    port number
+
 Access the 'Share' using `smbclient //IP/SHARE`
+
+you can type `smb://10.10.69.232` into the file explorer
+
+
 
 ### Vulnerable Hosts
 ```
@@ -629,12 +666,12 @@ zip2john [options] [zip file] > [output file]
 convert the zip file into a hash format that John is able to understand
 
 ```
-rar2john [options] [zip file] > [output file]
+rar2john [options] [rar file] > [output file]
 ```
 convert the rar file into a hash format that John is able to understand
 
 ```
-ssh2john [options] [zip file] > [output file]
+ssh2john [options] [rsa file] > [output file]
 ```
 convert the ssh file into a hash format that John is able to understand
 
@@ -910,34 +947,8 @@ then from here we can upload an RCE
 - File Content Filtering
 
 ---
-# REGEX
-
-- [0-9] - Will include numbers 0-9
-
-- [0] - Will include only the number 0
-
-- [A-z] - Will include both upper and lowercase
-
-- [A-Z] - Will include only uppercase letters
-
-- [a-z] - Will include only lowercase letters
-
-- [a] - Will include only a
-
-- [!£$%@] - Will include the symbols !£$%@
-
-
-# Exit VIM
-
-To save a file and exit Vim, do the following:
-
-- Switch to command mode by pressing the Esc key.
-- Press : (colon) to open the prompt bar in the bottom left corner of the window.
-- Type x after the colon and hit Enter. This will save the changes and exit.
 
 # Bypass file filtering
-
-
 
 ## Send the file directly to the upload point
 
@@ -963,4 +974,42 @@ collect a burpsuite capture to delete the filter either *before* the page loads 
 - use nano to add "A" the correct number of times to the start of the file
 - use hexeditor to change those characters to magic numbers associated to the target file type
 
-Hello
+---
+
+# RSA
+
+The key variables that you need to know about for RSA in CTFs are p, q, m, n, e, d, and c.
+
+“p” and “q” are large prime numbers, “n” is the product of p and q.
+
+The public key is n and e, the private key is n and d.
+
+“m” is used to represent the message (in plaintext) and “c” represents the ciphertext (encrypted text).
+
+# REGEX
+
+- [0-9] - Will include numbers 0-9
+
+- [0] - Will include only the number 0
+
+- [A-z] - Will include both upper and lowercase
+
+- [A-Z] - Will include only uppercase letters
+
+- [a-z] - Will include only lowercase letters
+
+- [a] - Will include only a
+
+- [!£$%@] - Will include the symbols !£$%@
+
+
+# Exit VIM
+
+To save a file and exit Vim, do the following:
+
+- Switch to command mode by pressing the Esc key.
+- Press : (colon) to open the prompt bar in the bottom left corner of the window.
+- Type x after the colon and hit Enter. This will save the changes and exit.
+
+---
+
